@@ -91,7 +91,7 @@ local function updateTimer(deltaTime)
 
 				task.wait(2)
 
-				-- Hide progres
+				-- Hide progress
 				for _, p in ipairs(game.Players:GetPlayers()) do
 					local screenLabel = p.PlayerGui
 						:WaitForChild("PercentageDisplay")
