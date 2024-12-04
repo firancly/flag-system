@@ -19,6 +19,7 @@ local function updateAllPlayersUI(newTeamName, teamColor)
 			if percentageDisplay then
 				local teamUI = percentageDisplay:FindFirstChild("TeamUI")
 				local zoneUI = percentageDisplay:FindFirstChild("Zone")
+				local teamUpdate = percentageDisplay:FindFirstChild("TeamUpdate")
 
 				if teamUI and teamUI:FindFirstChild("TextoEquipo") then
 					teamUI.TextoEquipo.Text = newTeamName
@@ -28,6 +29,19 @@ local function updateAllPlayersUI(newTeamName, teamColor)
 				if zoneUI and zoneUI:FindFirstChild("Texto") and zoneUI:FindFirstChild("UIStroke") then
 					zoneUI.Texto.TextColor3 = teamColor
 					zoneUI.UIStroke.Color = teamColor
+				end
+
+				if teamUpdate and teamUpdate:FindFirstChild("TextLabel") then
+					teamUpdate.TextLabel.Text = string.format("%s has captured point A", newTeamName)
+					teamUpdate.TextLabel.TextColor3 = teamColor
+					teamUpdate.TextLabel.Visible = true
+
+					-- Hide after 3 sec
+					task.delay(3, function()
+						if teamUpdate.TextLabel then
+							teamUpdate.TextLabel.Visible = false
+						end
+					end)
 				end
 			end
 		end
@@ -50,7 +64,7 @@ local function updateTimer(deltaTime)
 
 				captureProgress = captureProgress + deltaTime
 
-				-- Percentage
+				-- Progress Update
 				for _, p in ipairs(game.Players:GetPlayers()) do
 					local screenLabel = p.PlayerGui
 						:WaitForChild("PercentageDisplay")
@@ -66,7 +80,7 @@ local function updateTimer(deltaTime)
 
 				task.wait(1)
 
-				-- Team name
+				-- Team name update
 				for _, p in ipairs(game.Players:GetPlayers()) do
 					local screenLabel = p.PlayerGui
 						:WaitForChild("PercentageDisplay")
@@ -77,7 +91,7 @@ local function updateTimer(deltaTime)
 
 				task.wait(2)
 
-				-- Hide progress
+				-- Hide progres
 				for _, p in ipairs(game.Players:GetPlayers()) do
 					local screenLabel = p.PlayerGui
 						:WaitForChild("PercentageDisplay")
@@ -89,6 +103,7 @@ local function updateTimer(deltaTime)
 				if captureProgress >= captureTime then
 					currentTeam = player.Team
 
+					-- Update text labels
 					textLabel.Text = player.Team.Name
 					textLabel.TextColor3 = player.TeamColor.Color
 					textLabel2.TextColor3 = player.TeamColor.Color
